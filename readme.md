@@ -80,6 +80,7 @@ Vous pouvez aussi spécifier des attributs dans vos champs afin de spécifier le
 * **step** ou **data-step** : Valeur de déplacement pour le range
 * **data-pattern** : Pattern à exécuter spécialement pour ce champs
 * **data-error** : Message d'erreur. S'il n'est pas spécifié un message par défaut sera créé avec le nom du label associé. Si aucun label n'est associé, un autre message par défaut sera créé
+* **data-parent** : Spécifie un parent différent de celui indiqué dans les options
 
 ## Prise en charge des inputs
 
@@ -104,9 +105,7 @@ jQuery Validator retour un objet avec 2 entrées :
 
 # Améliorations prévues
 
-* type **search** : Si l'attribut *max* (ou *data-max*) n'est pas spécifié, sa valeur sera l'infinie
-* type **password** : Utiliser les attributs *min* (ou *data-min*) et *max* (ou *data-max*) pour vérifier la longueur du mot de passe 
-* Création d'un attribut *data-parent* pour spécifier un parent spécifique à la place de celui des options
+Aucune
 
 # Exemple
 

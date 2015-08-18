@@ -28,7 +28,7 @@
                 file: '^(.+)$',
 
                 // 192.168.1.200
-                ip: '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
+                ip: '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
 
                 // 2015-09
                 month: '^[0-9]{4}-(0[0-9]|1[0-2])$',
@@ -131,6 +131,13 @@
             var _id     = null;
             var _label  = null;
             var _error  = null;
+            var _parent = null;
+
+            if($input.attr('data-parent') !== undefined) {
+                _parent = $.trim($input.attr('data-parent'));
+            } else if(o.parent !== null && o.parent !== '') {
+                _parent = o.parent;
+            }
 
             switch (_type) {
                 case 'color':
@@ -170,7 +177,62 @@
                     break;
 
                 case 'password':
-                    _regex = ($input.attr('data-pattern') !== undefined) ? new RegExp($input.attr('data-pattern')) : new RegExp(o.patterns.password);
+                    if($input.attr('data-min') !== undefined) {
+                        _min = parseFloat($input.attr('data-min'));
+                    } else if($input.attr('min') !== undefined) {
+                        _min = parseFloat($input.attr('min'));
+                    } else {
+                        _min = 0;
+                    }
+
+                    if($input.attr('data-max') !== undefined) {
+                        _max = parseFloat($input.attr('data-max'));
+                    } else if($input.attr('max') !== undefined) {
+                        _max = parseFloat($input.attr('max'));
+                    } else {
+                        _max = Infinity;
+                    }
+
+                    var regex = ($input.attr('data-pattern') !== undefined) ? new RegExp($input.attr('data-pattern')) : new RegExp(o.patterns.password);
+
+                    if(!regex.test(_value) || _value.length < _min || _value.length > _max) {
+                        valid = false;
+
+                        if($input.attr('data-error') !== undefined) {
+                            _error = $input.attr('data-error');
+                        } else {
+                            _id = $input.attr('id');
+                            _label = $("label[for='"+_id+"']");
+
+                            if(_label.length > 0) {
+                                if(_requied && _value === '') {
+                                    _error = "Le champs " + _label.text() + " est requis.";
+                                } else {
+                                    _error = "Le champs " + _label.text() + " ne correspond pas.";
+                                }
+                            } else {
+                                if(_requied && _value === '') {
+                                    _error = "Le champs est requis.";
+                                } else {
+                                    _error = "Le champs ne correspond pas.";
+                                }
+                            }
+                        }
+
+                        errors.push({
+                            name: $input.attr('name'),
+                            input: $input,
+                            parent: (_parent !== null) ? $input.parents(o.parent) : null,
+                            error: _error,
+                            value: _value
+                        });
+
+                        if(_parent !== null) {
+                            $input.parents(o.parent).addClass('error');
+                        } else {
+                            $input.addClass('error');
+                        }
+                    }
                     break;
 
                 case 'checkbox':
@@ -199,12 +261,12 @@
                             errors.push({
                                 name: $input.attr('name'),
                                 input: $input,
-                                parent: (o.parent !== null && o.parent !== '') ? $input.parents(o.parent) : null,
+                                parent: (_parent !== null) ? $input.parents(o.parent) : null,
                                 error: _error,
                                 value: _value
                             });
 
-                            if(o.parent !== null && o.parent !== '') {
+                            if(_parent !== null) {
                                 $input.parents(o.parent).addClass('error');
                             } else {
                                 $input.addClass('error');
@@ -216,12 +278,31 @@
                 case 'range':
                     if(_requied || _value !== '') {
                         var isNumeric = $.isNumeric(_value);
-
                         _value = parseFloat(_value);
 
-                        _min = ($input.attr('data-min') !== undefined) ? parseFloat($input.attr('data-min')) : parseFloat($input.attr('min'));
-                        _max = ($input.attr('data-max') !== undefined) ? parseFloat($input.attr('data-max')) : parseFloat($input.attr('max'));
-                        _step = ($input.attr('data-step') !== undefined) ? parseFloat($input.attr('data-step')) : parseFloat($input.attr('step'));
+                        if($input.attr('data-min') !== undefined) {
+                            _min = parseFloat($input.attr('data-min'));
+                        } else if($input.attr('min') !== undefined) {
+                            _min = parseFloat($input.attr('min'));
+                        } else {
+                            throw new Error("Aucun attribut minimum n'est spécifié");
+                        }
+
+                        if($input.attr('data-max') !== undefined) {
+                            _max = parseFloat($input.attr('data-max'));
+                        } else if($input.attr('max') !== undefined) {
+                            _max = parseFloat($input.attr('max'));
+                        } else {
+                            throw new Error("Aucun attribut maximum n'est spécifié");
+                        }
+
+                        if($input.attr('data-step') !== undefined) {
+                            _step = parseFloat($input.attr('data-step'));
+                        } else if($input.attr('max') !== undefined) {
+                            _step = parseFloat($input.attr('step'));
+                        } else {
+                            throw new Error("Aucun attribut step n'est spécifié");
+                        }
 
                         if(_value < _min || _value > _max || _value % _step > 0 || !isNumeric) {
                             valid = false;
@@ -248,13 +329,14 @@
                             }
 
                             errors.push({
+                                name: $input.attr('name'),
                                 input: $input,
-                                parent: (o.parent !== null && o.parent !== '') ? $input.parents(o.parent) : null,
+                                parent: (_parent !== null) ? $input.parents(o.parent) : null,
                                 error: _error,
                                 value: _value
                             });
 
-                            if(o.parent !== null && o.parent !== '') {
+                            if(_parent !== null) {
                                 $input.parents(o.parent).addClass('error');
                             } else {
                                 $input.addClass('error');
@@ -266,8 +348,22 @@
                 case 'search':
                     if(_requied || _value !== '') {
                         _length = _value.split(' ').length;
-                        _min = ($input.attr('data-min') !== undefined) ? parseFloat($input.attr('data-min')) : parseFloat($input.attr('min'));
-                        _max = ($input.attr('data-max') !== undefined) ? parseFloat($input.attr('data-max')) : parseFloat($input.attr('max'));
+
+                        if($input.attr('data-min') !== undefined) {
+                            _min = parseFloat($input.attr('data-min'));
+                        } else if($input.attr('min') !== undefined) {
+                            _min = parseFloat($input.attr('min'));
+                        } else {
+                            _min = 0;
+                        }
+
+                        if($input.attr('data-max') !== undefined) {
+                            _max = parseFloat($input.attr('data-max'));
+                        } else if($input.attr('max') !== undefined) {
+                            _max = parseFloat($input.attr('max'));
+                        } else {
+                            _max = Infinity;
+                        }
 
                         if(_length < _min || _length > _max) {
                             valid = false;
@@ -294,13 +390,14 @@
                             }
 
                             errors.push({
+                                name: $input.attr('name'),
                                 input: $input,
-                                parent: (o.parent !== null && o.parent !== '') ? $input.parents(o.parent) : null,
+                                parent: (_parent !== null) ? $input.parents(o.parent) : null,
                                 error: _error,
                                 value: _value
                             });
 
-                            if(o.parent !== null && o.parent !== '') {
+                            if(_parent !== null) {
                                 $input.parents(o.parent).addClass('error');
                             } else {
                                 $input.addClass('error');
@@ -358,13 +455,14 @@
                         }
 
                         errors.push({
+                            name: $input.attr('name'),
                             input: $input,
-                            parent: (o.parent !== null && o.parent !== '') ? $input.parents(o.parent) : null,
+                            parent: (_parent !== null) ? $input.parents(o.parent) : null,
                             error: _error,
                             value: _value
                         });
 
-                        if(o.parent !== null && o.parent !== '') {
+                        if(_parent !== null) {
                             $input.parents(o.parent).addClass('error');
                         } else {
                             $input.addClass('error');
