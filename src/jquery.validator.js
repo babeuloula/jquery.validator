@@ -181,7 +181,7 @@
                     } else if($input.attr('min') !== undefined) {
                         _min = parseFloat($input.attr('min'));
                     } else {
-                        _max = -Infinity;
+                        _min = -Infinity;
                     }
 
                     if($input.attr('data-max') !== undefined) {
