@@ -75,8 +75,8 @@ Il contient une gestion des erreurs personnalisés, ainsi qu'une gestion des exp
 Vous pouvez aussi spécifier des attributs dans vos champs afin de spécifier les options
 
 * **required** ou **data-required** ou **data-required="true"** : Indique que le champs est requis
-* **min** ou **data-min** : Valeur minimum pour le range
-* **max** ou **data-max** : Valeur maximum pour le range
+* **min** ou **data-min** : Valeur minimum pour le range et le number
+* **max** ou **data-max** : Valeur maximum pour le range et le number
 * **step** ou **data-step** : Valeur de déplacement pour le range
 * **data-pattern** : Pattern à exécuter spécialement pour ce champs
 * **data-error** : Message d'erreur. S'il n'est pas spécifié un message par défaut sera créé avec le nom du label associé. Si aucun label n'est associé, un autre message par défaut sera créé
@@ -101,7 +101,8 @@ jQuery Validator retour un objet avec 2 entrées :
 
 # Cas particuliers
 
-* type **search** : Les attributs *min* (ou *data-min*) et *max* (ou *data-max*) permettent de tester le nombre de mots.
+* type **search** : Les attributs *min* (ou *data-min*) et *max* (ou *data-max*) permettent de tester le nombre de mots
+* type **password** : Les attributs *min* (ou *data-min*) et *max* (ou *data-max*) permettent de tester le nombre de caractères
 
 # Améliorations prévues
 

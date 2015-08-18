@@ -124,6 +124,7 @@
             $input.removeClass(o.errorClass);
 
             var _regex  = null;
+            var regex   = null;
             var _min    = null;
             var _max    = null;
             var _step   = null;
@@ -173,7 +174,64 @@
                     break;
 
                 case 'number':
-                    _regex = ($input.attr('data-pattern') !== undefined) ? new RegExp($input.attr('data-pattern')) : new RegExp(o.patterns.number);
+                    _value = parseFloat(_value);
+
+                    if($input.attr('data-min') !== undefined) {
+                        _min = parseFloat($input.attr('data-min'));
+                    } else if($input.attr('min') !== undefined) {
+                        _min = parseFloat($input.attr('min'));
+                    } else {
+                        _max = -Infinity;
+                    }
+
+                    if($input.attr('data-max') !== undefined) {
+                        _max = parseFloat($input.attr('data-max'));
+                    } else if($input.attr('max') !== undefined) {
+                        _max = parseFloat($input.attr('max'));
+                    } else {
+                        _max = Infinity;
+                    }
+
+                    regex = ($input.attr('data-pattern') !== undefined) ? new RegExp($input.attr('data-pattern')) : new RegExp(o.patterns.number);
+
+                    if(!regex.test(_value) || _value < _min || _value > _max) {
+                        valid = false;
+
+                        if($input.attr('data-error') !== undefined) {
+                            _error = $input.attr('data-error');
+                        } else {
+                            _id = $input.attr('id');
+                            _label = $("label[for='"+_id+"']");
+
+                            if(_label.length > 0) {
+                                if(_requied && _value === '') {
+                                    _error = "Le champs " + _label.text() + " est requis";
+                                } else {
+                                    _error = "Le champs " + _label.text() + " ne correspond pas";
+                                }
+                            } else {
+                                if(_requied && _value === '') {
+                                    _error = "Le champs est requis";
+                                } else {
+                                    _error = "Le champs ne correspond pas";
+                                }
+                            }
+                        }
+
+                        errors.push({
+                            name: $input.attr('name'),
+                            input: $input,
+                            parent: (_parent !== null) ? $input.parents(o.parent) : null,
+                            error: _error,
+                            value: _value
+                        });
+
+                        if(_parent !== null) {
+                            $input.parents(o.parent).addClass(o.errorClass);
+                        } else {
+                            $input.addClass(o.errorClass);
+                        }
+                    }
                     break;
 
                 case 'password':
@@ -193,7 +251,7 @@
                         _max = Infinity;
                     }
 
-                    var regex = ($input.attr('data-pattern') !== undefined) ? new RegExp($input.attr('data-pattern')) : new RegExp(o.patterns.password);
+                    regex = ($input.attr('data-pattern') !== undefined) ? new RegExp($input.attr('data-pattern')) : new RegExp(o.patterns.password);
 
                     if(!regex.test(_value) || _value.length < _min || _value.length > _max) {
                         valid = false;
@@ -206,15 +264,15 @@
 
                             if(_label.length > 0) {
                                 if(_requied && _value === '') {
-                                    _error = "Le champs " + _label.text() + " est requis.";
+                                    _error = "Le champs " + _label.text() + " est requis";
                                 } else {
-                                    _error = "Le champs " + _label.text() + " ne correspond pas.";
+                                    _error = "Le champs " + _label.text() + " ne correspond pas";
                                 }
                             } else {
                                 if(_requied && _value === '') {
-                                    _error = "Le champs est requis.";
+                                    _error = "Le champs est requis";
                                 } else {
-                                    _error = "Le champs ne correspond pas.";
+                                    _error = "Le champs ne correspond pas";
                                 }
                             }
                         }
@@ -249,11 +307,11 @@
 
                                 if(_label.length > 0) {
                                     if(_requied) {
-                                        _error = "Le champs " + _label.text() + " est requis.";
+                                        _error = "Le champs " + _label.text() + " est requis";
                                     }
                                 } else {
                                     if(_requied) {
-                                        _error = "Le champs est requis.";
+                                        _error = "Le champs est requis";
                                     }
                                 }
                             }
@@ -315,15 +373,15 @@
 
                                 if(_label.length > 0) {
                                     if(_requied && _value === '') {
-                                        _error = "Le champs " + _label.text() + " est requis.";
+                                        _error = "Le champs " + _label.text() + " est requis";
                                     } else {
-                                        _error = "Le champs " + _label.text() + " ne correspond pas.";
+                                        _error = "Le champs " + _label.text() + " ne correspond pas";
                                     }
                                 } else {
                                     if(_requied && _value === '') {
-                                        _error = "Le champs est requis.";
+                                        _error = "Le champs est requis";
                                     } else {
-                                        _error = "Le champs ne correspond pas.";
+                                        _error = "Le champs ne correspond pas";
                                     }
                                 }
                             }
@@ -376,15 +434,15 @@
 
                                 if(_label.length > 0) {
                                     if(_requied) {
-                                        _error = "Le champs " + _label.text() + " est requis.";
+                                        _error = "Le champs " + _label.text() + " est requis";
                                     } else {
-                                        _error = "Le champs " + _label.text() + " ne correspond pas.";
+                                        _error = "Le champs " + _label.text() + " ne correspond pas";
                                     }
                                 } else {
                                     if(_requied) {
-                                        _error = "Le champs est requis.";
+                                        _error = "Le champs est requis";
                                     } else {
-                                        _error = "Le champs ne correspond pas.";
+                                        _error = "Le champs ne correspond pas";
                                     }
                                 }
                             }
@@ -441,15 +499,15 @@
 
                             if(_label.length > 0) {
                                 if(_requied && _value === '') {
-                                    _error = "Le champs " + _label.text() + " est requis.";
+                                    _error = "Le champs " + _label.text() + " est requis";
                                 } else {
-                                    _error = "Le champs " + _label.text() + " ne correspond pas.";
+                                    _error = "Le champs " + _label.text() + " ne correspond pas";
                                 }
                             } else {
                                 if(_requied && _value === '') {
-                                    _error = "Le champs est requis.";
+                                    _error = "Le champs est requis";
                                 } else {
-                                    _error = "Le champs ne correspond pas.";
+                                    _error = "Le champs ne correspond pas";
                                 }
                             }
                         }
