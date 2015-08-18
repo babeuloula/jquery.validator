@@ -121,7 +121,7 @@
                 _type = 'text';
             }
 
-            $input.removeClass('error');
+            $input.removeClass(o.errorClass);
 
             var _regex  = null;
             var _min    = null;
@@ -228,9 +228,9 @@
                         });
 
                         if(_parent !== null) {
-                            $input.parents(o.parent).addClass('error');
+                            $input.parents(o.parent).addClass(o.errorClass);
                         } else {
-                            $input.addClass('error');
+                            $input.addClass(o.errorClass);
                         }
                     }
                     break;
@@ -267,9 +267,9 @@
                             });
 
                             if(_parent !== null) {
-                                $input.parents(o.parent).addClass('error');
+                                $input.parents(o.parent).addClass(o.errorClass);
                             } else {
-                                $input.addClass('error');
+                                $input.addClass(o.errorClass);
                             }
                         }
                     }
@@ -337,9 +337,9 @@
                             });
 
                             if(_parent !== null) {
-                                $input.parents(o.parent).addClass('error');
+                                $input.parents(o.parent).addClass(o.errorClass);
                             } else {
-                                $input.addClass('error');
+                                $input.addClass(o.errorClass);
                             }
                         }
                     }
@@ -398,9 +398,9 @@
                             });
 
                             if(_parent !== null) {
-                                $input.parents(o.parent).addClass('error');
+                                $input.parents(o.parent).addClass(o.errorClass);
                             } else {
-                                $input.addClass('error');
+                                $input.addClass(o.errorClass);
                             }
                         }
                     }
@@ -463,9 +463,9 @@
                         });
 
                         if(_parent !== null) {
-                            $input.parents(o.parent).addClass('error');
+                            $input.parents(o.parent).addClass(o.errorClass);
                         } else {
-                            $input.addClass('error');
+                            $input.addClass(o.errorClass);
                         }
                     }
                 }
