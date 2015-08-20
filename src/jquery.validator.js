@@ -481,7 +481,7 @@
                     break;
 
                 default:
-                    _regex = ($input.attr('data-pattern') !== undefined) ? new RegExp($input.attr('data-pattern')) : new RegExp('^(.+)$');
+                    _regex = ($input.attr('data-pattern') !== undefined) ? new RegExp($input.attr('data-pattern')) : new RegExp('^(.+)$', 'm');
                     break;
             }
 
