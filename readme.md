@@ -110,42 +110,88 @@ Aucune
 
 # Exemple
 
+Une démo est visible ici : [http://babeuloula.github.io/jquery.validator/](http://babeuloula.github.io/jquery.validator/)
+
 ```html
-    <form>
-	    <label for="date">Date d'achat</label>
-	    <input type="text" data-type="date" name="date_fr" id="date" data-pattern="^([0-2][0-9]|3[0-1])/(0[0-9]|1[0-2])/[0-9]{4}$" required>
-	    
-	    <label>IP</label>
-  	    <input type="text" data-type="ip" name="ip" data-required>
+    <style>
+        form.demo label, form.demo input, form.demo textarea, form.demo .error, form.demo .error_display {
+          display: block;
+        }
 
-		<label>Prix</label>
-  	    <input type="range" value="5" min="0" max="25" step="5" name="range" data-required="true">
-	
-		<input type="submit" id="submit" value="Payer">
-  	    
+        form.demo label {
+            margin-top: 10px;
+        }
+
+        form.demo input[type="text"], form.demo textarea {
+            border-color: rgba(0, 0, 0, 0.2);
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 0.3rem;
+            padding: 5px;
+        }
+
+        form.demo input[type="submit"] {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        form.demo textarea {
+          width: 100%;
+          height: 200px;
+        }
+
+        form.demo .error_display {
+            color: darkred;
+            font-size: 12px;
+        }
+    </style>
+
+    <form class="demo">
+        <label for="date">Date *</label>
+        <input type="text" data-type="date" name="date" id="date" placeholder="jj/mm/aaaa" data-error="Le champs doit être au format jj/mm/aaaa" data-required="true">
+
+        <label for="email">Adresse email *</label>
+        <input type="text" data-type="email" id="email" name="email" placeholder="email@domaine.fr" data-error="Le champs doit être au format email@domaine.fr" data-required="true">
+
+        <label for="site_web">Site Internet</label>
+        <input type="text" data-type="url" id="site_web" name="site_web" placeholder="www.domaine.fr" data-error="Le champs doit être au format www.domaine.fr">
+
+        <label for="message">Message *</label>
+        <textarea id="message" name="message" placeholder="Votre message" data-required="true"></textarea>
+
+        <input type="submit" id="submit" value="Envoyer">
+
+        <div>
+            * Champs obligatoire
+        </div>
     </form>
-    
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="dist/jquery.validator.min.js"></script>
     <script>
-	    jQuery(function($){
-             $(document).on('click', '#submit', function(e) {
-	             e.preventDefault();
-                 e.stopPropagation();
+        jQuery(function($){
+            $(document).on('click', '#submit', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-                 $(".validator_errors").remove();
+                $(".error_display").remove();
 
-                 var validator = $("form").validator();
+                var validator = $("form.demo").validator({
+                    patterns: {
+                        date: '^([0-2][0-9]|3[0-1])/(0[0-9]|1[0-2])/[0-9]{4}$'
+                    }
+                });
 
-                 if(validator.isValid) {
-                     // TODO
-                 } else {
-                     $errors = $("<div/>").addClass('validator_errors');
-                     $.each(validator.errors, function( index, value ) {
-                         $errors.append(value.error + "<br>");
-                     });
-                     
-                     $("form").prepend($errors);
-                 }
-             });
-         });
+                console.log(validator);
+
+                if(validator.isValid) {
+                    // TODO
+                } else {
+                    $.each(validator.errors, function(key, error) {
+                        $('<small class="error_display">'+error.error+'</small>').insertAfter(error.input);
+                    });
+                }
+            });
+        });
     </script>
 ```
