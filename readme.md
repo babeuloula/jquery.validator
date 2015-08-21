@@ -5,7 +5,7 @@ Il contient une gestion des erreurs personnalisés, ainsi qu'une gestion des exp
 
 # Options
 
-```
+```javascript
     errorClass: 'error', // Classe à afficher en cas d'erreur
     parent: null, // Si spécifié, la classe erreur sera sur ce parent
     patterns: { // Les patterns
@@ -110,7 +110,7 @@ Aucune
 
 # Exemple
 
-```
+```html
     <form>
 	    <label for="date">Date d'achat</label>
 	    <input type="text" data-type="date" name="date_fr" id="date" data-pattern="^([0-2][0-9]|3[0-1])/(0[0-9]|1[0-2])/[0-9]{4}$" required>
