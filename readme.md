@@ -7,6 +7,7 @@ Il contient une gestion des erreurs personnalisés, ainsi qu'une gestion des exp
 
 ```javascript
     errorClass: 'error', // Classe à afficher en cas d'erreur
+    validClass: 'valid', // Classe à afficher en cas de succès
     parent: null, // Si spécifié, la classe erreur sera sur ce parent
     patterns: { // Les patterns
         // #000000

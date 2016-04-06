@@ -5,6 +5,7 @@
 
         var defauts = {
             errorClass: 'error',
+            validClass: 'valid',
             parent: null,
             patterns: {
                 // #000000
@@ -525,6 +526,8 @@
                         } else {
                             $input.addClass(o.errorClass);
                         }
+                    } else {
+                        $input.addClass(o.validClass);
                     }
                 }
             }
