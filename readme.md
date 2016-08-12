@@ -3,6 +3,10 @@
 jQuery Validator vous permet de valider facilement vos formulaires.
 Il contient une gestion des erreurs personnalisés, ainsi qu'une gestion des expressions régulières pour les champs à valider.
 
+# Mises à jour
+
+- Prise en charge des captcha Google reCAPTCHA
+
 # Options
 
 ```javascript
