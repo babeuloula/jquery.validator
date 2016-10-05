@@ -547,7 +547,7 @@
 
 
         // Détéction de reCAPTCHA
-        var $reCAPTCHA = $(document).find('.g-recaptcha');
+        var $reCAPTCHA = $selector.find('.g-recaptcha');
 
         if($reCAPTCHA.length > 0) {
             if($.trim(grecaptcha.getResponse()) ===  "") {
